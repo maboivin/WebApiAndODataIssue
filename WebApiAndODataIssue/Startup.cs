@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 
 namespace WebApiAndODataIssue
 {
@@ -28,7 +22,19 @@ namespace WebApiAndODataIssue
         {
             services.AddHttpContextAccessor();
             services.AddControllers();
-            services.AddOData();
+            services.AddOData(options =>
+            {
+                options
+                    .Select()
+                    .Expand()
+                    .Filter()
+                    .OrderBy()
+                    .Count()
+                    .SetMaxTop(100)
+                    .AddModel("api/odata", GetEdmModel());
+
+                // options.EnableAttributeRouting = false;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,13 +49,10 @@ namespace WebApiAndODataIssue
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.EnableDependencyInjection();
-                endpoints.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
-                endpoints.MapODataRoute("odata", "api/odata", this.GetEdmModel());
             });
         }
 
-        private IEdmModel GetEdmModel()
+        private static IEdmModel GetEdmModel()
         {
             var builder = new ODataConventionModelBuilder();
             builder.EntitySet<User>("Users");
