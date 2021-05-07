@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
 
 namespace WebApiAndODataIssue.Api.WebApi
 {
-    [ApiController]
     [Route("_api/users")]
+    [NonODataController]
     public class UsersController : ControllerBase
     {
         [HttpGet]

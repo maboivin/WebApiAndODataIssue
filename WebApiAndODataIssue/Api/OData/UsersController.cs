@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Attributes;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace WebApiAndODataIssue.Api.OData
 {
+    // [ODataRouting]
+    // [Route("api/odata/users")]
     public class UsersController : ODataController
     {
+        // [ODataRouting]
+        // [Route("api/odata/users")]
         [HttpGet]
         [EnableQuery]
         public IEnumerable<User> Get()

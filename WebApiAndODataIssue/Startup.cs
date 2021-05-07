@@ -21,20 +21,20 @@ namespace WebApiAndODataIssue
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddControllers();
-            services.AddOData(options =>
-            {
-                options
-                    .Select()
-                    .Expand()
-                    .Filter()
-                    .OrderBy()
-                    .Count()
-                    .SetMaxTop(100)
-                    .AddModel("api/odata", GetEdmModel());
-
-                // options.EnableAttributeRouting = false;
-            });
+            
+            services
+                .AddControllers()
+                .AddOData(options =>
+                {
+                    options
+                        .Select()
+                        .Expand()
+                        .Filter()
+                        .OrderBy()
+                        .Count()
+                        .SetMaxTop(100)
+                        .AddModel("api/odata", GetEdmModel());
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
